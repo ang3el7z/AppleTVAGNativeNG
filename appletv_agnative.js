@@ -19,6 +19,8 @@
   var TOPNAV_SETTINGS_COMPONENT = 'agnative_topnav';
   var ABOUT_SETTINGS_COMPONENT = 'agnative_about';
   var GLARE_CLASS = 'appletv-agnative-topnav-glare';
+  var INPUT_KEYS_CLASS = 'appletv-agnative-input-keys';
+  var INPUT_MOUSE_CLASS = 'appletv-agnative-input-mouse';
   var CONTRIBUTORS = ['nartes_ua', 'GwynnBleiidd', 'ManiacWithAxe'];
 
   var scheduled = false;
@@ -33,6 +35,9 @@
   var controlPanelPrevController = '';
   var controlPanelControllerReady = false;
   var controlPanelDocCloseBound = false;
+  var inputModeListenerBound = false;
+  var swallowClickUntil = 0;
+  var reinitTimer = null;
 
   var I18N = {
     ru: {
@@ -245,6 +250,8 @@
       closeControlPanel(false);
       if (document.body) document.body.classList.remove(BODY_CLASS);
       if (document.body) document.body.classList.remove(GLARE_CLASS);
+      if (document.body) document.body.classList.remove(INPUT_KEYS_CLASS);
+      if (document.body) document.body.classList.remove(INPUT_MOUSE_CLASS);
       var style = document.getElementById(STYLE_ID);
       if (style) style.remove();
       var shell = document.querySelector('.agnative-topnav-shell');
@@ -277,8 +284,7 @@
         onBack: function () {
           topnavSettingsOpen = false;
           Lampa.Settings.create(SETTINGS_COMPONENT);
-          setTimeout(function () { startPlugin(); }, 50);
-          setTimeout(function () { schedulePatch(); }, 120);
+          requestPluginReinit(60);
         }
       });
     }, 0);
@@ -457,12 +463,7 @@
             removePluginUi();
             return;
           }
-          setTimeout(function () {
-            startPlugin();
-            schedulePatch();
-            setTimeout(function () { schedulePatch(); }, 150);
-            setTimeout(function () { schedulePatch(); }, 500);
-          }, 50);
+          requestPluginReinit(60);
         }
       });
 
@@ -526,7 +527,7 @@
         onChange: function () {
           logoCache = {};
           resetCardDecor();
-          setTimeout(function () { schedulePatch(); }, 80);
+          schedulePatch();
         }
       });
 
@@ -544,7 +545,7 @@
         },
         onChange: function () {
           resetCardDecor();
-          setTimeout(function () { schedulePatch(); }, 80);
+          schedulePatch();
         }
       });
 
@@ -562,7 +563,7 @@
         },
         onChange: function () {
           resetCardDecor();
-          setTimeout(function () { schedulePatch(); }, 80);
+          schedulePatch();
         }
       });
 
@@ -680,8 +681,7 @@
       Lampa.Storage.listener.follow('change', function (e) {
         if (e.name === ENABLE_KEY) {
           if (pluginEnabled()) {
-            setTimeout(function () { startPlugin(); }, 50);
-            setTimeout(function () { schedulePatch(); }, 120);
+            requestPluginReinit(60);
           } else {
             removePluginUi();
           }
@@ -696,7 +696,7 @@
         if (e.name === LOGO_LANG_KEY || e.name === BADGE_KEY || e.name === RATING_KEY) {
           if (e.name === LOGO_LANG_KEY) logoCache = {};
           resetCardDecor();
-          setTimeout(function () { schedulePatch(); }, 80);
+          schedulePatch();
           return;
         }
 
@@ -707,21 +707,77 @@
 
         if (e.name === TOPNAV_ITEMS_KEY) {
           if (topnavSettingsOpen) return;
-          setTimeout(function () { startPlugin(); }, 50);
-          setTimeout(function () { schedulePatch(); }, 120);
+          requestPluginReinit(60);
           return;
         }
 
         if (e.name === 'lampac_theme' || e.name === 'lampac_interface_scene') {
           if (pluginEnabled()) {
-            setTimeout(function () { startPlugin(); }, 50);
-            setTimeout(function () { schedulePatch(); }, 120);
+            requestPluginReinit(60);
           } else {
             removePluginUi();
           }
         }
       });
     }
+  }
+
+  function requestPluginReinit(delay) {
+    clearTimeout(reinitTimer);
+    reinitTimer = setTimeout(function () {
+      startPlugin();
+      schedulePatch();
+    }, typeof delay === 'number' ? delay : 60);
+  }
+
+  function consumeEvent(e) {
+    if (!e) return;
+    try {
+      if (e.cancelable && typeof e.preventDefault === 'function') e.preventDefault();
+      if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+      if (typeof e.stopPropagation === 'function') e.stopPropagation();
+    } catch (err) { }
+  }
+
+  function markSwallowClick(ms) {
+    swallowClickUntil = Date.now() + (typeof ms === 'number' ? ms : 260);
+  }
+
+  function setInputMode(mode) {
+    if (!document.body) return;
+    if (mode === 'keys') {
+      document.body.classList.add(INPUT_KEYS_CLASS);
+      document.body.classList.remove(INPUT_MOUSE_CLASS);
+      return;
+    }
+    if (mode === 'mouse') {
+      document.body.classList.add(INPUT_MOUSE_CLASS);
+      document.body.classList.remove(INPUT_KEYS_CLASS);
+    }
+  }
+
+  function bindInputModeListeners() {
+    if (inputModeListenerBound || !window || !window.addEventListener) return;
+    inputModeListenerBound = true;
+
+    window.addEventListener('keydown', function (e) {
+      if (!pluginEnabled()) return;
+      if (!e) return;
+      if (e.altKey || e.ctrlKey || e.metaKey) return;
+      var key = String(e.key || '');
+      if (key === 'Shift' || key === 'Alt' || key === 'Control' || key === 'Meta') return;
+      setInputMode('keys');
+    }, true);
+
+    var switchToMouse = function () {
+      if (!pluginEnabled()) return;
+      setInputMode('mouse');
+    };
+
+    window.addEventListener('mousemove', switchToMouse, true);
+    window.addEventListener('mousedown', switchToMouse, true);
+    window.addEventListener('wheel', switchToMouse, true);
+    window.addEventListener('touchstart', switchToMouse, true);
   }
 
   function isMobile() {
@@ -790,6 +846,10 @@
     var style = document.createElement('style');
     style.id = STYLE_ID;
     style.textContent = [
+      'body.' + INPUT_KEYS_CLASS + ',',
+      'body.' + INPUT_KEYS_CLASS + ' * {',
+      '  cursor: none !important;',
+      '}',
       'body.' + BODY_CLASS + ' .head,',
       'body.' + BODY_CLASS + ' .head__body,',
       'body.' + BODY_CLASS + ' .head__wrapper,',
@@ -1143,12 +1203,32 @@
     return iconProfile();
   }
 
-  function clickNode(node) {
-    if (!node) return;
+  function triggerSelectorEvent(node, eventName) {
+    if (!node || !eventName) return false;
+    try {
+      if (window.$) {
+        $(node).trigger(eventName);
+        return true;
+      }
+    } catch (e) { }
+    return false;
+  }
+
+  function triggerSelectorEnter(node) {
+    if (!node) return false;
+    var entered = false;
+    entered = triggerSelectorEvent(node, 'hover:focus') || entered;
+    entered = triggerSelectorEvent(node, 'hover:enter') || entered;
+
+    if (entered) return true;
+
+    // Fallback for edge cases where selector handlers are unavailable.
     try {
       if (typeof node.click === 'function') node.click();
       else node.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+      return true;
     } catch (e) { }
+    return false;
   }
 
   function getMenuItem(action) {
@@ -1160,6 +1240,9 @@
     action = normalizeTopnavAction(action);
     try {
       if (!window.Lampa) return false;
+      var nativeMenuItem = getMenuItem(action);
+      if (nativeMenuItem && triggerSelectorEnter(nativeMenuItem)) return true;
+
       var Storage = Lampa.Storage;
       var Lang = Lampa.Lang;
       if (!Storage || !Lang || !Lampa.Activity) return false;
@@ -1202,6 +1285,9 @@
   function triggerSearch() {
     closeControlPanel(false);
     try {
+      var menuItem = getMenuItem('search');
+      if (menuItem && triggerSelectorEnter(menuItem)) return true;
+
       if (window.Lampa && Lampa.Search && typeof Lampa.Search.open === 'function') {
         Lampa.Search.open({});
         return true;
@@ -1215,7 +1301,7 @@
     try {
       var menuItem = getMenuItem('settings');
       if (menuItem) {
-        clickNode(menuItem);
+        triggerSelectorEnter(menuItem);
         return true;
       }
 
@@ -1223,7 +1309,7 @@
         Lampa.ParentalControl.personal('settings', function () {
           var nativeBtn = qs('.head__settings, .settings-icon-holder, .head__action.open--settings, .open--settings');
           if (nativeBtn) {
-            clickNode(nativeBtn);
+            triggerSelectorEnter(nativeBtn);
             return;
           }
           if (Lampa.Controller && typeof Lampa.Controller.toggle === 'function') {
@@ -1274,6 +1360,9 @@
   function triggerFavorite() {
     closeControlPanel(false);
     try {
+      var menuItem = getMenuItem('favorite');
+      if (menuItem && triggerSelectorEnter(menuItem)) return true;
+
       if (window.Lampa && Lampa.ParentalControl && typeof Lampa.ParentalControl.personal === 'function' && Lampa.Activity && Lampa.Lang) {
         Lampa.ParentalControl.personal('bookmarks', function () {
           Lampa.Activity.push({ component: 'bookmarks', title: Lampa.Lang.translate('settings_input_links') });
@@ -1297,21 +1386,39 @@
   function triggerProfile() {
     closeControlPanel(false);
     try {
+      var openProfilesDirect = function () {
+        if (window.Lampa && Lampa.Account && Lampa.Account.Profile && typeof Lampa.Account.Profile.select === 'function') {
+          Lampa.Account.Profile.select(function () {
+            if (window.Lampa && Lampa.Controller && typeof Lampa.Controller.toggle === 'function') {
+              Lampa.Controller.toggle('head');
+            }
+          });
+          return true;
+        }
+
+        if (window.Lampa && Lampa.Account && typeof Lampa.Account.showProfiles === 'function') {
+          Lampa.Account.showProfiles(function () {
+            if (window.Lampa && Lampa.Controller && typeof Lampa.Controller.toggle === 'function') {
+              Lampa.Controller.toggle('head');
+            }
+          });
+          return true;
+        }
+        return false;
+      };
+
       var nativeBtn = qs('.head__action.open--profile, .open--profile');
       if (nativeBtn) {
-        clickNode(nativeBtn);
+        triggerSelectorEnter(nativeBtn);
+        setTimeout(function () {
+          if (!document.body) return;
+          if (document.body.classList.contains('selectbox--open')) return;
+          openProfilesDirect();
+        }, 80);
         return true;
       }
 
-      if (window.Lampa && Lampa.Account && Lampa.Account.Profile && typeof Lampa.Account.Profile.select === 'function') {
-        Lampa.Account.Profile.select(function () { });
-        return true;
-      }
-
-      if (window.Lampa && Lampa.Account && typeof Lampa.Account.showProfiles === 'function') {
-        Lampa.Account.showProfiles(function () { });
-        return true;
-      }
+      return openProfilesDirect();
     } catch (e) { }
     return false;
   }
@@ -1320,15 +1427,39 @@
     if (controlPanelDocCloseBound || !document || !document.addEventListener) return;
     controlPanelDocCloseBound = true;
     var closeIfOutside = function (e) {
-      if (!controlPanelOpen) return;
       var target = e && e.target;
       if (!target) return;
+
+      // When settings drawer is open, first outside click must only close it.
+      if (document.body && document.body.classList.contains('settings--open')) {
+        if (!(target.closest && target.closest('.settings'))) {
+          try {
+            if (window.Lampa && Lampa.Controller && typeof Lampa.Controller.back === 'function') {
+              Lampa.Controller.back();
+            }
+          } catch (err) { }
+          markSwallowClick(280);
+          consumeEvent(e);
+          return;
+        }
+      }
+
+      if (!controlPanelOpen) return;
       if (target.closest && target.closest('.agnative-control-panel')) return;
       if (target.closest && target.closest('.agnative-topnav-shell__clock')) return;
       closeControlPanel(true);
+      markSwallowClick(280);
+      consumeEvent(e);
     };
+
+    var swallowClick = function (e) {
+      if (Date.now() >= swallowClickUntil) return;
+      consumeEvent(e);
+    };
+
     document.addEventListener('mousedown', closeIfOutside, true);
     document.addEventListener('touchstart', closeIfOutside, true);
+    document.addEventListener('click', swallowClick, true);
   }
 
   function ensureControlPanelController(panel) {
@@ -1341,7 +1472,6 @@
         var target = qs('.agnative-control-panel__tile.selected', panel) || qs('.agnative-control-panel__tile.selector', panel);
         Lampa.Controller.collectionSet(view);
         Lampa.Controller.collectionFocus(target || false, view, true);
-        if (target && typeof target.focus === 'function') target.focus();
       },
       up: function () { if (window.Navigator && Navigator.move) Navigator.move('up'); },
       down: function () { if (window.Navigator && Navigator.move) Navigator.move('down'); },
@@ -1456,7 +1586,6 @@
         $(btn).on('hover:enter.agnativeTopnavAction', run);
         $(btn).on('hover:focus.agnativeTopnavAction hover:hover.agnativeTopnavAction', function () {
           btn.classList.add('focus');
-          if (typeof btn.focus === 'function') btn.focus();
         });
         $(btn).on('hover:blur.agnativeTopnavAction hover:out.agnativeTopnavAction', function () {
           btn.classList.remove('focus');
@@ -1474,8 +1603,8 @@
       setTimeout(function () { busy = false; }, 180);
       if (e && e.preventDefault) e.preventDefault();
       if (e && e.stopPropagation) e.stopPropagation();
-      if (actionName && triggerMenuAction(actionName)) return;
-      if (sourceNode) clickNode(sourceNode);
+      if (sourceNode && triggerSelectorEnter(sourceNode)) return false;
+      if (actionName && triggerMenuAction(actionName)) return false;
       return false;
     }
     btn.addEventListener('click', run);
@@ -1490,7 +1619,6 @@
         $(btn).on('hover:enter.agnativeTopnavMenu', run);
         $(btn).on('hover:focus.agnativeTopnavMenu hover:hover.agnativeTopnavMenu', function () {
           btn.classList.add('focus');
-          if (typeof btn.focus === 'function') btn.focus();
         });
         $(btn).on('hover:blur.agnativeTopnavMenu hover:out.agnativeTopnavMenu', function () {
           btn.classList.remove('focus');
@@ -1499,10 +1627,23 @@
     }
   }
 
-  function registerTopnavController(shell) {
-    if (!shell || !window.Lampa || !Lampa.Controller || !window.$) return;
+  function syncTopnavWithHeadController(head) {
+    if (!head || !window.Lampa || !Lampa.Controller || !window.$) return;
+    if (typeof Lampa.Controller.enabled !== 'function' || typeof Lampa.Controller.collectionSet !== 'function') return;
+
     try {
-      Lampa.Controller.collectionSet($(shell));
+      var enabled = Lampa.Controller.enabled();
+      if (!enabled || enabled.name !== 'head') return;
+
+      var view = $(head);
+      var target = qs('.agnative-topnav-shell__item.focus', head) ||
+        qs('.agnative-topnav-shell__item.is-active', head) ||
+        qs('.agnative-topnav-shell__item.selector', head);
+
+      Lampa.Controller.collectionSet(view, false, true);
+      if (typeof Lampa.Controller.collectionFocus === 'function') {
+        Lampa.Controller.collectionFocus(target || false, view, true);
+      }
     } catch (e) { }
   }
 
@@ -1599,7 +1740,7 @@
 
     updateClock();
 
-    registerTopnavController(shell);
+    syncTopnavWithHeadController(head);
 
     qsa('.agnative-topnav-shell__item[data-action]', shell).forEach(function (btn) {
       btn.classList.remove('is-active');
@@ -1845,31 +1986,28 @@
 
     injectStyle();
     if (document.body) document.body.classList.add(BODY_CLASS);
+    bindInputModeListeners();
+    setInputMode('mouse');
     syncGlareClass();
     observeCards();
     initGlareRuntime();
     processCards(document.body);
     schedulePatch();
-    setTimeout(function () { injectStyle(); }, 1000);
-    setTimeout(function () { injectStyle(); }, 3000);
+    setTimeout(function () { injectStyle(); }, 900);
     setTimeout(function () {
       var actBody = qs('.activity--active .activity__body') || qs('.activity__body');
       if (actBody) {
         processCards(actBody);
       }
     }, 600);
-
-    schedulePatch();
-    setTimeout(function () { schedulePatch(); }, 400);
-    setTimeout(function () { schedulePatch(); }, 1200);
+    setTimeout(function () { schedulePatch(); }, 420);
   }
 
   function bootPlugin() {
     registerSettings();
     startPlugin();
-    setTimeout(function () { startPlugin(); }, 250);
-    setTimeout(function () { startPlugin(); }, 900);
-    setTimeout(function () { startPlugin(); }, 1800);
+    setTimeout(function () { schedulePatch(); }, 350);
+    requestPluginReinit(950);
   }
 
   if (window.appready) bootPlugin();
