@@ -4,8 +4,8 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Release version tag (example: v0.4.0)'
-        required: true
+        description: 'Release version tag (optional, example: v0.4.0)'
+        required: false
         type: string
       prerelease:
         description: 'Mark release as pre-release'
@@ -15,9 +15,11 @@ on:
 
 permissions:
   contents: write
+  pages: write
+  id-token: write
 
 concurrency:
-  group: release-${{ github.event.inputs.version }}
+  group: release-main
   cancel-in-progress: false
 
 jobs:
@@ -30,10 +32,28 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Validate version format
+      - name: Resolve release version
+        id: version
         run: |
-          VERSION='${{ github.event.inputs.version }}'
+          git fetch --tags --force
+          INPUT_VERSION='${{ github.event.inputs.version }}'
+          if [ -n "$INPUT_VERSION" ]; then
+            VERSION="$INPUT_VERSION"
+          else
+            LAST_STABLE="$(git tag --list | grep -E '^v[0-9]+\.[0-9]+\.[0-9]+$' | sort -V | tail -n 1 || true)"
+            if [ -z "$LAST_STABLE" ]; then
+              VERSION='v0.0.1'
+            else
+              MAJOR="$(echo "$LAST_STABLE" | cut -d. -f1 | sed 's/^v//')"
+              MINOR="$(echo "$LAST_STABLE" | cut -d. -f2)"
+              PATCH="$(echo "$LAST_STABLE" | cut -d. -f3)"
+              VERSION="v${MAJOR}.${MINOR}.$((PATCH + 1))"
+            fi
+          fi
+
           echo "$VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+([-.][0-9A-Za-z.-]+)?$'
+          echo "Resolved version: $VERSION"
+          echo "value=$VERSION" >> "$GITHUB_OUTPUT"
 
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -54,7 +74,7 @@ jobs:
 
       - name: Ensure tag does not already exist
         run: |
-          TAG='${{ github.event.inputs.version }}'
+          TAG='${{ steps.version.outputs.value }}'
           if git rev-parse "$TAG" >/dev/null 2>&1; then
             echo "Tag $TAG already exists"
             exit 1
@@ -62,17 +82,31 @@ jobs:
 
       - name: Create and push tag
         run: |
-          TAG='${{ github.event.inputs.version }}'
+          TAG='${{ steps.version.outputs.value }}'
           git tag "$TAG"
           git push origin "$TAG"
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.event.inputs.version }}
-          name: ${{ github.event.inputs.version }}
+          tag_name: ${{ steps.version.outputs.value }}
+          name: ${{ steps.version.outputs.value }}
           generate_release_notes: true
           prerelease: ${{ github.event.inputs.prerelease }}
           files: |
             release/appletv_agnative.js
             release/checksums.txt
+
+      - name: Prepare Pages content
+        run: |
+          node scripts/prepare-pages.mjs
+          echo '${{ steps.version.outputs.value }}' > pages-dist/version.txt
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages-dist
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
