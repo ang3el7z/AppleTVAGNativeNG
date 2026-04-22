@@ -6,7 +6,7 @@ export const en = {
   set_enable_name: 'AppleTV AgNative',
   set_enable_desc: 'Enables and disables the plugin',
   set_glare_name: 'Tilt veoveo.ru', set_glare_desc: 'by arabian_q',
-  set_topnav_name: 'Topnav items', set_topnav_desc: 'Left menu',
+  set_topnav_name: 'Topnav items', set_topnav_desc: 'Top menu',
   set_topnav_title: 'Top navigation items',
   set_topnav_item_desc: 'menu_list item: ',
   set_logo_lang_name: 'Logo language',

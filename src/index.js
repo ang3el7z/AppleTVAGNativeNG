@@ -1935,6 +1935,42 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
     return dock;
   }
 
+  function syncClockActionState(clock, head) {
+    if (!clock) return clock;
+
+    if (controlPanelEnabled()) {
+      clock.classList.add('selector');
+      clock.setAttribute('data-selector', 'true');
+      clock.setAttribute('tabindex', '0');
+      if (clock.getAttribute('data-agnative-bound') !== '1') {
+        bindAction(clock, function () { return triggerClockActions(head); });
+        clock.setAttribute('data-agnative-bound', '1');
+      }
+      return clock;
+    }
+
+    closeControlPanel(false);
+    clock.classList.remove('selector');
+    clock.classList.remove('hover');
+    clock.classList.remove('focus');
+    clock.removeAttribute('data-selector');
+    clock.removeAttribute('tabindex');
+
+    if (clock.getAttribute('data-agnative-bound') === '1') {
+      var detached = clock.cloneNode(true);
+      detached.removeAttribute('data-agnative-bound');
+      detached.classList.remove('selector');
+      detached.classList.remove('hover');
+      detached.classList.remove('focus');
+      detached.removeAttribute('data-selector');
+      detached.removeAttribute('tabindex');
+      if (clock.parentNode) clock.parentNode.replaceChild(detached, clock);
+      clock = detached;
+    }
+
+    return clock;
+  }
+
   function ensureClock(head) {
     if (!head) return null;
     var dock = ensureRightDock(head) || head;
@@ -1942,12 +1978,10 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
     if (!clock) {
       clock = document.createElement('div');
       clock.id = CLOCK_ID;
-      clock.className = 'agnative-topnav-clock selector';
-      clock.setAttribute('data-selector', 'true');
-      clock.setAttribute('tabindex', '0');
-      bindAction(clock, function () { triggerClockActions(head); });
+      clock.className = 'agnative-topnav-clock';
     }
     if (clock.parentNode !== dock) dock.appendChild(clock);
+    clock = syncClockActionState(clock, head);
     return clock;
   }
 

@@ -64,6 +64,22 @@ jobs:
           node-version: 22
           cache: npm
 
+      - name: Update about version from tag
+        run: node scripts/update-about-version.mjs '${{ steps.version.outputs.value }}'
+
+      - name: Commit and push version to branch
+        run: |
+          if git diff --quiet -- src/i18n/en.js src/i18n/ru.js src/i18n/uk.js appletv_agnative.js release/appletv_agnative.js; then
+            echo "About version is already up to date"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/i18n/en.js src/i18n/ru.js src/i18n/uk.js appletv_agnative.js release/appletv_agnative.js
+          git commit -m "chore: sync about version ${{ steps.version.outputs.value }}"
+          git push origin HEAD:${{ github.ref_name }}
+
       - name: Install dependencies
         run: npm ci
 

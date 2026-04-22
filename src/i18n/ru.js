@@ -6,7 +6,7 @@ export const ru = {
   set_enable_name: 'AppleTV AgNative',
   set_enable_desc: 'Включает и выключает плагин',
   set_glare_name: 'Наклон veoveo.ru', set_glare_desc: 'от arabian_q',
-  set_topnav_name: 'Пункты Topnav', set_topnav_desc: 'Меню слева',
+  set_topnav_name: 'Пункты Topnav', set_topnav_desc: 'Меню сверху',
   set_topnav_title: 'Пункты верхнего меню',
   set_topnav_item_desc: 'Пункт menu_list: ',
   set_logo_lang_name: 'Язык логотипов',
