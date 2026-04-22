@@ -1035,6 +1035,12 @@
             return;
           }
 
+          if (e.name === CONTROL_PANEL_KEY) {
+            if (e.value === 'off') closeControlPanel(true);
+            setTimeout(function () { schedulePatch(); }, 80);
+            return;
+          }
+
           if (e.name === FONT_SIZE_KEY || e.name === CATEGORY_SIZE_KEY) {
             syncFontSize();
             return;
