@@ -10,6 +10,7 @@ export const AGNATIVE_DEFAULTS = {
   rating: 'off',
   ratingStyle: 'color',
   categorySize: 'md',
+  cardSize: 'md',
   clockSeconds: 'off',
   controlPanel: 'off'
 };

@@ -14,6 +14,7 @@ export const AGNATIVE_KEYS = {
   RATING_KEY: 'appletv_agnative_rating',
   RATING_STYLE_KEY: 'appletv_agnative_rating_style',
   CATEGORY_SIZE_KEY: 'appletv_agnative_category_size',
+  CARD_SIZE_KEY: 'appletv_agnative_card_size',
   CLOCK_SECONDS_KEY: 'appletv_agnative_clock_seconds',
   CONTROL_PANEL_KEY: 'appletv_agnative_control_panel',
   SETTINGS_COMPONENT: 'agnative',
@@ -24,5 +25,6 @@ export const AGNATIVE_KEYS = {
   BADGE_ATTR: 'data-agnative-badge',
   RATING_ATTR: 'data-agnative-rating',
   RATING_STYLE_ATTR: 'data-agnative-rating-style',
-  CATEGORY_SIZE_ATTR: 'data-agnative-category'
+  CATEGORY_SIZE_ATTR: 'data-agnative-category',
+  CARD_SIZE_ATTR: 'data-agnative-card-size'
 };

@@ -24,6 +24,7 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
     RATING_KEY,
     RATING_STYLE_KEY,
     CATEGORY_SIZE_KEY,
+    CARD_SIZE_KEY,
     CLOCK_SECONDS_KEY,
     CONTROL_PANEL_KEY,
     SETTINGS_COMPONENT,
@@ -34,7 +35,8 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
     BADGE_ATTR,
     RATING_ATTR,
     RATING_STYLE_ATTR,
-    CATEGORY_SIZE_ATTR
+    CATEGORY_SIZE_ATTR,
+    CARD_SIZE_ATTR
   } = AGNATIVE_KEYS;
 
   var scheduled = false;
@@ -117,6 +119,13 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
     } catch (e) { return 'md'; }
   }
 
+  function getCardSize() {
+    try {
+      if (!window.Lampa || !Lampa.Storage) return 'md';
+      return Lampa.Storage.get(CARD_SIZE_KEY, 'md') || 'md';
+    } catch (e) { return 'md'; }
+  }
+
   function getRatingStyle() {
     try {
       if (!window.Lampa || !Lampa.Storage) return 'color';
@@ -168,6 +177,7 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
         document.body.classList.remove(GLARE_CLASS);
         document.body.removeAttribute(FONT_SIZE_ATTR);
         document.body.removeAttribute(CATEGORY_SIZE_ATTR);
+        document.body.removeAttribute(CARD_SIZE_ATTR);
         document.body.removeAttribute(BACKDROP_ATTR);
         document.body.removeAttribute(BADGE_ATTR);
         document.body.removeAttribute(RATING_ATTR);
@@ -293,6 +303,11 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
     if (!document.body) return;
     document.body.setAttribute(FONT_SIZE_ATTR, getFontSize());
     document.body.setAttribute(CATEGORY_SIZE_ATTR, getCategorySize());
+  }
+
+  function syncCardSize() {
+    if (!document.body) return;
+    document.body.setAttribute(CARD_SIZE_ATTR, getCardSize());
   }
 
   function syncCardFlags() {
@@ -541,6 +556,29 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
         },
         onChange: function () {
           syncFontSize();
+        }
+      });
+
+      Lampa.SettingsApi.addParam({
+        component: SETTINGS_COMPONENT,
+        param: {
+          name: CARD_SIZE_KEY,
+          type: 'select',
+          values: {
+            xs: t('val_size_xs'),
+            sm: t('val_size_sm'),
+            md: t('val_size_md'),
+            lg: t('val_size_lg'),
+            xl: t('val_size_xl')
+          },
+          default: 'md'
+        },
+        field: {
+          name: t('set_card_size_name'),
+          description: t('set_card_size_desc')
+        },
+        onChange: function () {
+          syncCardSize();
         }
       });
 
@@ -1237,6 +1275,17 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
       '@media (max-width: 767px) { body.' + BODY_CLASS + ' .mapping--grid { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; } }',
       'body.' + BODY_CLASS + ' .card { width:auto !important; margin:0 !important; padding-bottom:0 !important; transform-origin:center center !important; overflow:visible !important; }',
       'body.' + BODY_CLASS + ' .items-line .card { width:17.6em !important; flex:0 0 auto !important; }',
+      'body.' + BODY_CLASS + '[' + BACKDROP_ATTR + '="off"] .items-line .card { width:13em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"] .items-line .card { width:14em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:10.4em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"] .items-line .card { width:15.8em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:11.7em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"] .items-line .card { width:17.6em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:13em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"] .items-line .card { width:19.4em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:14.3em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"] .items-line .card { width:21.2em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:15.6em !important; }',
       'body.' + BODY_CLASS + ' .card .card-watched { transform: scale(.8) !important; bottom: 0 !important; max-height: 100% !important; overflow: hidden !important; }',
       'body.' + BODY_CLASS + ' .card .card__view { padding-bottom:56.25% !important; margin-bottom:0 !important; border-radius:1.35em !important; overflow:hidden !important; clip-path: inset(0 round 1.35em); -webkit-clip-path: inset(0 round 1.35em); box-shadow: inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(255,255,255,.04), 0 8px 18px rgba(0,0,0,.18) !important; transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, filter .28s ease, opacity .18s ease !important; }',
       'body.' + BODY_CLASS + ' .card[data-nfx-switched="1"] .card__view { opacity:1 !important; }',
@@ -1246,6 +1295,11 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
       'body.' + BODY_CLASS + ' .card.hover .card__view { transform: translateY(-.04em) scale(1.03) !important; filter: saturate(1.02) brightness(1.01) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 10px 24px rgba(0,0,0,.16) !important; }',
       'body.' + BODY_CLASS + ' .card.focus::after, body.' + BODY_CLASS + ' .card.hover::after, body.' + BODY_CLASS + ' .card__view::before, body.' + BODY_CLASS + ' .card__view::after { display:none !important; content:none !important; }',
       'body.' + BODY_CLASS + ' .card-episode { width:17.6em !important; flex:0 0 auto !important; margin:0 !important; padding:0 !important; background:transparent !important; border:0 !important; outline:0 !important; box-shadow:none !important; transform:none !important; transform-origin:center center !important; overflow:visible !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"] .card-episode { width:14em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"] .card-episode { width:15.8em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"] .card-episode { width:17.6em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"] .card-episode { width:19.4em !important; }',
+      'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"] .card-episode { width:21.2em !important; }',
       'body.' + BODY_CLASS + ' .card-episode.focus, body.' + BODY_CLASS + ' .card-episode.hover, body.' + BODY_CLASS + ' .card-episode.focus .card-episode__body, body.' + BODY_CLASS + ' .card-episode.hover .card-episode__body { border:0 !important; outline:0 !important; box-shadow:none !important; background:transparent !important; }',
       'body.' + BODY_CLASS + ' .card-episode__body { background:transparent !important; border:0 !important; outline:0 !important; box-shadow:none !important; padding:0 !important; margin:0 !important; display:block !important; overflow:visible !important; }',
       'body.' + BODY_CLASS + ' .card-episode .full-episode { position:relative !important; display:block !important; background:transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important; margin:0 !important; overflow:visible !important; transform-origin:center center !important; transition: transform .28s cubic-bezier(.22,.61,.36,1) !important; }',
@@ -2362,6 +2416,7 @@ import { GENRE_MAP_LOCALIZED, hasI18nCode, registerI18nToLampa } from './i18n/in
     if (document.body) document.body.classList.add(BODY_CLASS);
     syncGlareClass();
     syncFontSize();
+    syncCardSize();
     syncCardFlags();
     observeCards();
     initGlareRuntime();

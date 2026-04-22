@@ -32,6 +32,8 @@ export const en = {
   set_reset_done: 'AppleTV AgNative settings reset',
   set_category_size_name: 'Category title size',
   set_category_size_desc: 'Section titles (Popular, New, etc.)',
+  set_card_size_name: 'Card size',
+  set_card_size_desc: 'Card width in rows',
   set_clock_seconds_name: 'Seconds in clock',
   set_clock_seconds_desc: 'Show seconds next to the header clock',
   set_control_panel_name: 'Clock click panel',

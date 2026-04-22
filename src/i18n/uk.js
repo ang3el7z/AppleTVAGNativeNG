@@ -32,6 +32,8 @@ export const uk = {
   set_reset_done: 'Налаштування AppleTV AgNative скинуто',
   set_category_size_name: 'Розмір назв категорій',
   set_category_size_desc: 'Заголовки поличок (Популярне, Новинки тощо)',
+  set_card_size_name: 'Розмір карточок',
+  set_card_size_desc: 'Ширина карточок у стрічках',
   set_clock_seconds_name: 'Секунди в годиннику',
   set_clock_seconds_desc: 'Показувати секунди поруч із годинником у шапці',
   set_control_panel_name: 'Панель за кліком на годинник',
