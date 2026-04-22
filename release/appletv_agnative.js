@@ -26,7 +26,6 @@
     RATING_KEY: 'appletv_agnative_rating',
     RATING_STYLE_KEY: 'appletv_agnative_rating_style',
     CATEGORY_SIZE_KEY: 'appletv_agnative_category_size',
-    CARD_SIZE_KEY: 'appletv_agnative_card_size',
     CLOCK_SECONDS_KEY: 'appletv_agnative_clock_seconds',
     CONTROL_PANEL_KEY: 'appletv_agnative_control_panel',
     SETTINGS_COMPONENT: 'agnative',
@@ -37,28 +36,33 @@
     BADGE_ATTR: 'data-agnative-badge',
     RATING_ATTR: 'data-agnative-rating',
     RATING_STYLE_ATTR: 'data-agnative-rating-style',
-    CATEGORY_SIZE_ATTR: 'data-agnative-category',
-    CARD_SIZE_ATTR: 'data-agnative-card-size'
+    CATEGORY_SIZE_ATTR: 'data-agnative-category'
   };
 
   const ru = {
-    nav_feed: 'Лента',
+    nav_main: 'Главная', nav_movie: 'Фильмы', nav_tv: 'Сериалы',
+    nav_cartoon: 'Мультфильмы', nav_anime: 'Аниме', nav_release: 'Новинки',
+    nav_collection: 'Подборки', nav_schedule: 'Расписание',
+    nav_history: 'История', nav_bookmarks: 'Избранное',
+    nav_notice: 'Уведомления', nav_feed: 'Лента', nav_console: 'Торренты',
     badge_movie: 'ФИЛЬМ', badge_tv: 'СЕРИАЛ',
     set_about_desc: 'Версия 0.3.0  Авторы: llowmikee, nrsua, gwynnbleiidd, arabianq, ang3el7z',
     set_main_title: 'Основные настройки',
     set_enable_name: 'AppleTV AgNative',
     set_enable_desc: 'Включает и выключает плагин',
     set_glare_name: 'Наклон veoveo.ru', set_glare_desc: 'от arabian_q',
-    set_topnav_name: 'Пункты Topnav', set_topnav_desc: 'Меню сверху',
+    set_topnav_name: 'Пункты Topnav', set_topnav_desc: 'Меню слева',
     set_topnav_title: 'Пункты верхнего меню',
     set_topnav_item_desc: 'Пункт menu_list: ',
     set_logo_lang_name: 'Язык логотипов',
     set_logo_lang_desc: 'Если логотипа на выбранном языке нет — используется английский',
     set_font_size_name: 'Размер шрифта',
     set_font_size_desc: 'Масштаб текста интерфейса и карточек',
+    set_ui_lang_name: 'Язык интерфейса',
     set_ui_lang_desc: 'Язык подписей плагина',
     val_on: 'Включить', val_off: 'Выключить',
-    val_hide: 'Скрыть',
+    val_add: 'Добавить', val_hide: 'Скрыть',
+    val_ru: 'Русский', val_en: 'Английский', val_uk: 'Украинский',
     val_auto: 'Автоматически',
     val_size_xs: 'Мелкий', val_size_sm: 'Маленький',
     val_size_md: 'Обычный', val_size_lg: 'Крупный', val_size_xl: 'Огромный',
@@ -67,6 +71,7 @@
     set_backdrop_desc: 'Заменять постер на кадр из фильма (backdrop)',
     set_badge_name: 'Бейдж «Фильм/Сериал»',
     set_badge_desc: 'Метка в левом верхнем углу карточки',
+    set_rating_name: 'Рейтинг TMDB',
     set_rating_desc: 'Показывать оценку в правом верхнем углу',
     set_rating_style_name: 'Стиль рейтинга TMDB',
     set_rating_style_desc: 'Цветной или монохромный вид оценки',
@@ -75,8 +80,6 @@
     set_reset_done: 'Настройки AppleTV AgNative сброшены',
     set_category_size_name: 'Размер названий категорий',
     set_category_size_desc: 'Заголовки полок (Популярное, Новинки и т.д.)',
-    set_card_size_name: 'Размер карточек',
-    set_card_size_desc: 'Ширина карточек в лентах',
     set_clock_seconds_name: 'Секунды в часах',
     set_clock_seconds_desc: 'Показывать секунды рядом с часами в шапке',
     set_control_panel_name: 'Панель по клику на часы',
@@ -84,23 +87,29 @@
   };
 
   const en = {
-    nav_feed: 'Feed',
+    nav_main: 'Home', nav_movie: 'Movies', nav_tv: 'TV Shows',
+    nav_cartoon: 'Cartoons', nav_anime: 'Anime', nav_release: 'New',
+    nav_collection: 'Collections', nav_schedule: 'Schedule',
+    nav_history: 'History', nav_bookmarks: 'Favorites',
+    nav_notice: 'Notifications', nav_feed: 'Feed', nav_console: 'Torrents',
     badge_movie: 'MOVIE', badge_tv: 'TV SHOW',
     set_about_desc: 'Версия 0.3.0  Авторы: llowmikee, nrsua, gwynnbleiidd, arabianq, ang3el7z',
     set_main_title: 'Main settings',
     set_enable_name: 'AppleTV AgNative',
     set_enable_desc: 'Enables and disables the plugin',
     set_glare_name: 'Tilt veoveo.ru', set_glare_desc: 'by arabian_q',
-    set_topnav_name: 'Topnav items', set_topnav_desc: 'Top menu',
+    set_topnav_name: 'Topnav items', set_topnav_desc: 'Left menu',
     set_topnav_title: 'Top navigation items',
     set_topnav_item_desc: 'menu_list item: ',
     set_logo_lang_name: 'Logo language',
     set_logo_lang_desc: 'If no logo in chosen language — English is used',
     set_font_size_name: 'Font size',
     set_font_size_desc: 'Interface and card text scale',
+    set_ui_lang_name: 'Interface language',
     set_ui_lang_desc: 'Plugin label language',
     val_on: 'Enable', val_off: 'Disable',
-    val_hide: 'Hide',
+    val_add: 'Add', val_hide: 'Hide',
+    val_ru: 'Russian', val_en: 'English', val_uk: 'Ukrainian',
     val_auto: 'Auto',
     val_size_xs: 'Extra small', val_size_sm: 'Small',
     val_size_md: 'Normal', val_size_lg: 'Large', val_size_xl: 'Extra large',
@@ -109,6 +118,7 @@
     set_backdrop_desc: 'Replace poster with backdrop image',
     set_badge_name: '"Movie/TV" badge',
     set_badge_desc: 'Label in the top-left corner of the card',
+    set_rating_name: 'TMDB rating',
     set_rating_desc: 'Show score in the top-right corner',
     set_rating_style_name: 'TMDB rating style',
     set_rating_style_desc: 'Colored or monochrome score style',
@@ -117,8 +127,6 @@
     set_reset_done: 'AppleTV AgNative settings reset',
     set_category_size_name: 'Category title size',
     set_category_size_desc: 'Section titles (Popular, New, etc.)',
-    set_card_size_name: 'Card size',
-    set_card_size_desc: 'Card width in rows',
     set_clock_seconds_name: 'Seconds in clock',
     set_clock_seconds_desc: 'Show seconds next to the header clock',
     set_control_panel_name: 'Clock click panel',
@@ -126,23 +134,29 @@
   };
 
   const uk = {
-    nav_feed: 'Стрічка',
+    nav_main: 'Головна', nav_movie: 'Фільми', nav_tv: 'Серіали',
+    nav_cartoon: 'Мультфільми', nav_anime: 'Аніме', nav_release: 'Новинки',
+    nav_collection: 'Добірки', nav_schedule: 'Розклад',
+    nav_history: 'Історія', nav_bookmarks: 'Обране',
+    nav_notice: 'Сповіщення', nav_feed: 'Стрічка', nav_console: 'Торренти',
     badge_movie: 'ФІЛЬМ', badge_tv: 'СЕРІАЛ',
     set_about_desc: 'Версия 0.3.0  Авторы: llowmikee, nrsua, gwynnbleiidd, arabianq, ang3el7z',
     set_main_title: 'Основні налаштування',
     set_enable_name: 'AppleTV AgNative',
     set_enable_desc: 'Вмикає та вимикає плагін',
     set_glare_name: 'Нахил veoveo.ru', set_glare_desc: 'від arabian_q',
-    set_topnav_name: 'Пункти Topnav', set_topnav_desc: 'Меню зверху',
+    set_topnav_name: 'Пункти Topnav', set_topnav_desc: 'Меню ліворуч',
     set_topnav_title: 'Пункти верхнього меню',
     set_topnav_item_desc: 'Пункт menu_list: ',
     set_logo_lang_name: 'Мова логотипів',
     set_logo_lang_desc: 'Якщо логотип обраною мовою відсутній — використовується англійський',
     set_font_size_name: 'Розмір шрифту',
     set_font_size_desc: 'Масштаб тексту інтерфейсу та карток',
+    set_ui_lang_name: 'Мова інтерфейсу',
     set_ui_lang_desc: 'Мова підписів плагіна',
     val_on: 'Увімкнути', val_off: 'Вимкнути',
-    val_hide: 'Приховати',
+    val_add: 'Додати', val_hide: 'Приховати',
+    val_ru: 'Російська', val_en: 'Англійська', val_uk: 'Українська',
     val_auto: 'Автоматично',
     val_size_xs: 'Дрібний', val_size_sm: 'Малий',
     val_size_md: 'Звичайний', val_size_lg: 'Великий', val_size_xl: 'Величезний',
@@ -151,6 +165,7 @@
     set_backdrop_desc: 'Заміняти постер на кадр з фільму (backdrop)',
     set_badge_name: 'Бейдж «Фільм/Серіал»',
     set_badge_desc: 'Мітка у лівому верхньому куті картки',
+    set_rating_name: 'Рейтинг TMDB',
     set_rating_desc: 'Показувати оцінку у правому верхньому куті',
     set_rating_style_name: 'Стиль рейтингу TMDB',
     set_rating_style_desc: 'Кольоровий або монохромний вигляд оцінки',
@@ -159,8 +174,6 @@
     set_reset_done: 'Налаштування AppleTV AgNative скинуто',
     set_category_size_name: 'Розмір назв категорій',
     set_category_size_desc: 'Заголовки поличок (Популярне, Новинки тощо)',
-    set_card_size_name: 'Розмір карточок',
-    set_card_size_desc: 'Ширина карточок у стрічках',
     set_clock_seconds_name: 'Секунди в годиннику',
     set_clock_seconds_desc: 'Показувати секунди поруч із годинником у шапці',
     set_control_panel_name: 'Панель за кліком на годинник',
@@ -192,35 +205,11 @@
   };
 
   const I18N = { ru, en, uk };
-  const I18N_CODES = Object.keys(I18N);
-
-  function hasI18nCode(code) {
-    return I18N_CODES.indexOf(code) !== -1;
-  }
-
-  function registerI18nToLampa() {
-    if (!window.Lampa || !Lampa.Lang || typeof Lampa.Lang.add !== 'function') return;
-    if (window.__APPLETV_AGNATIVE_I18N_REGISTERED__) return;
-
-    var payload = {};
-
-    I18N_CODES.forEach(function (code) {
-      var dict = I18N[code] || {};
-      Object.keys(dict).forEach(function (key) {
-        if (!payload[key]) payload[key] = {};
-        payload[key][code] = dict[key];
-      });
-    });
-
-    Lampa.Lang.add(payload);
-    window.__APPLETV_AGNATIVE_I18N_REGISTERED__ = true;
-  }
 
   (function () {
     'use strict';
 
     if (!canBootPlugin()) return;
-    registerI18nToLampa();
 
     var {
       STYLE_ID,
@@ -238,7 +227,6 @@
       RATING_KEY,
       RATING_STYLE_KEY,
       CATEGORY_SIZE_KEY,
-      CARD_SIZE_KEY,
       CLOCK_SECONDS_KEY,
       CONTROL_PANEL_KEY,
       SETTINGS_COMPONENT,
@@ -249,12 +237,10 @@
       BADGE_ATTR,
       RATING_ATTR,
       RATING_STYLE_ATTR,
-      CATEGORY_SIZE_ATTR,
-      CARD_SIZE_ATTR
+      CATEGORY_SIZE_ATTR
     } = AGNATIVE_KEYS;
 
     var scheduled = false;
-    var patchTimer = null;
     var clockTimer = null;
     var logoCache = {};
     var logoPending = {};
@@ -269,15 +255,6 @@
     var controlPanelControllerReady = false;
     var controlPanelDocCloseBound = false;
     var swallowClickUntil = 0;
-    var cardObserver = null;
-    var cardQueueTimer = null;
-    var pendingCardNodes = [];
-    var pendingEpisodeNodes = [];
-    var cardQueueAttr = 'data-nfx-queued';
-    var episodeQueueAttr = 'data-nfx-ep-queued';
-    var topnavSignature = '';
-    var styleCacheText = '';
-    var pluginRuntimeReady = false;
 
     function qs(sel, root) {
       return (root || document).querySelector(sel);
@@ -285,31 +262,6 @@
 
     function qsa(sel, root) {
       return Array.prototype.slice.call((root || document).querySelectorAll(sel));
-    }
-
-    function clearCardQueue() {
-      for (var i = 0; i < pendingCardNodes.length; i++) {
-        if (pendingCardNodes[i] && pendingCardNodes[i].removeAttribute) {
-          pendingCardNodes[i].removeAttribute(cardQueueAttr);
-        }
-      }
-      for (var j = 0; j < pendingEpisodeNodes.length; j++) {
-        if (pendingEpisodeNodes[j] && pendingEpisodeNodes[j].removeAttribute) {
-          pendingEpisodeNodes[j].removeAttribute(episodeQueueAttr);
-        }
-      }
-      pendingCardNodes = [];
-      pendingEpisodeNodes = [];
-      if (cardQueueTimer) {
-        clearTimeout(cardQueueTimer);
-        cardQueueTimer = null;
-      }
-    }
-
-    function stopCardObserver() {
-      if (cardObserver && cardObserver.disconnect) cardObserver.disconnect();
-      cardObserver = null;
-      clearCardQueue();
     }
 
     function pluginEnabled() {
@@ -340,7 +292,7 @@
         if (!window.Lampa || !Lampa.Storage) return detectLampaLang();
         var v = Lampa.Storage.get(UI_LANG_KEY, 'auto');
         if (!v || v === 'auto') return detectLampaLang();
-        if (hasI18nCode(v)) return v;
+        if (I18N[v]) return v;
         return 'ru';
       } catch (e) { return 'ru'; }
     }
@@ -368,13 +320,6 @@
       } catch (e) { return 'md'; }
     }
 
-    function getCardSize() {
-      try {
-        if (!window.Lampa || !Lampa.Storage) return 'md';
-        return Lampa.Storage.get(CARD_SIZE_KEY, 'md') || 'md';
-      } catch (e) { return 'md'; }
-    }
-
     function getRatingStyle() {
       try {
         if (!window.Lampa || !Lampa.Storage) return 'color';
@@ -397,13 +342,10 @@
     function controlPanelEnabled() { return storageFlagOn(CONTROL_PANEL_KEY, 'off'); }
 
     function t(key) {
-      try {
-        if (window.Lampa && Lampa.Lang && typeof Lampa.Lang.translate === 'function') {
-          registerI18nToLampa();
-          return Lampa.Lang.translate(key, getUiLang());
-        }
-      } catch (e) { }
-      return key;
+      var lang = getUiLang();
+      var dict = I18N[lang] || I18N.ru;
+      if (dict[key]) return dict[key];
+      return (I18N.ru[key] || key);
     }
 
     function glareEnabled() {
@@ -420,26 +362,12 @@
     }
 
     function removePluginUi() {
-      stopCardObserver();
-      topnavSignature = '';
-      pluginRuntimeReady = false;
-      scheduled = false;
-      if (patchTimer) {
-        clearTimeout(patchTimer);
-        patchTimer = null;
-      }
-      if (clockTimer) {
-        clearInterval(clockTimer);
-        clockTimer = null;
-      }
-
       try {
         if (document.body) {
           document.body.classList.remove(BODY_CLASS);
           document.body.classList.remove(GLARE_CLASS);
           document.body.removeAttribute(FONT_SIZE_ATTR);
           document.body.removeAttribute(CATEGORY_SIZE_ATTR);
-          document.body.removeAttribute(CARD_SIZE_ATTR);
           document.body.removeAttribute(BACKDROP_ATTR);
           document.body.removeAttribute(BADGE_ATTR);
           document.body.removeAttribute(RATING_ATTR);
@@ -486,21 +414,21 @@
 
     function getFallbackTopnavItems() {
       return [
-        { action: 'main', label: langText('menu_main', t('nav_main')) },
-        { action: 'movie', label: langText('menu_movies', t('nav_movie')) },
-        { action: 'tv', label: langText('menu_tv', t('nav_tv')) },
-        { action: 'cartoon', label: langText('menu_multmovie', t('nav_cartoon')) },
-        { action: 'anime', label: langText('menu_anime', t('nav_anime')) },
-        { action: 'release', label: langText('title_new', t('nav_release')) },
-        { action: 'releases', label: langText('title_new', t('nav_release')) },
-        { action: 'collection', label: langText('menu_collections', t('nav_collection')) },
-        { action: 'collections', label: langText('menu_collections', t('nav_collection')) },
-        { action: 'schedule', label: langText('menu_timeline', t('nav_schedule')) },
-        { action: 'history', label: langText('menu_history', t('nav_history')) },
-        { action: 'bookmarks', label: langText('menu_bookmark', t('nav_bookmarks')) },
-        { action: 'notice', label: langText('title_notice', t('nav_notice')) },
+        { action: 'main', label: t('nav_main') },
+        { action: 'movie', label: t('nav_movie') },
+        { action: 'tv', label: t('nav_tv') },
+        { action: 'cartoon', label: t('nav_cartoon') },
+        { action: 'anime', label: t('nav_anime') },
+        { action: 'release', label: t('nav_release') },
+        { action: 'releases', label: t('nav_release') },
+        { action: 'collection', label: t('nav_collection') },
+        { action: 'collections', label: t('nav_collection') },
+        { action: 'schedule', label: t('nav_schedule') },
+        { action: 'history', label: t('nav_history') },
+        { action: 'bookmarks', label: t('nav_bookmarks') },
+        { action: 'notice', label: t('nav_notice') },
         { action: 'feed', label: t('nav_feed') },
-        { action: 'console', label: langText('menu_torrents', t('nav_console')) }
+        { action: 'console', label: t('nav_console') }
       ];
     }
 
@@ -567,11 +495,6 @@
       document.body.setAttribute(CATEGORY_SIZE_ATTR, getCategorySize());
     }
 
-    function syncCardSize() {
-      if (!document.body) return;
-      document.body.setAttribute(CARD_SIZE_ATTR, getCardSize());
-    }
-
     function syncCardFlags() {
       if (!document.body) return;
       document.body.setAttribute(BACKDROP_ATTR, backdropEnabled() ? 'on' : 'off');
@@ -601,19 +524,12 @@
       qsa('.card[data-nfx-switched]').forEach(function (c) {
         restoreOriginalImg(c);
         c.removeAttribute('data-nfx-switched');
-        c.removeAttribute(cardQueueAttr);
-        c.removeAttribute('data-nfx-retry');
         var overlay = c.querySelector('.nfx-card-overlay');
         if (overlay) overlay.remove();
         var badge = c.querySelector('.nfx-card-logo');
         if (badge) badge.remove();
         var rating = c.querySelector('.nfx-card-rating');
         if (rating) rating.remove();
-      });
-      qsa('.card-episode[data-nfx-ep-switched]').forEach(function (c) {
-        c.removeAttribute('data-nfx-ep-switched');
-        c.removeAttribute(episodeQueueAttr);
-        c.removeAttribute('data-nfx-ep-retry');
       });
     }
 
@@ -716,7 +632,7 @@
           param: {
             name: ENABLE_KEY,
             type: 'select',
-            values: { on: langText('extensions_enable', t('val_on')), off: langText('extensions_disable', t('val_off')) },
+            values: { on: t('val_on'), off: t('val_off') },
             default: 'off'
           },
           field: {
@@ -744,14 +660,14 @@
             type: 'select',
             values: {
               auto: t('val_auto'),
-              ru: langText('filter_lang_ru', t('val_ru')),
-              en: langText('filter_lang_en', t('val_en')),
-              uk: langText('filter_lang_uk', t('val_uk'))
+              ru: t('val_ru'),
+              en: t('val_en'),
+              uk: t('val_uk')
             },
             default: 'auto'
           },
           field: {
-            name: langText('settings_interface_lang', t('set_ui_lang_name')),
+            name: t('set_ui_lang_name'),
             description: t('set_ui_lang_desc')
           },
           onChange: function () {
@@ -766,9 +682,9 @@
             type: 'select',
             values: {
               auto: t('val_auto'),
-              ru: langText('filter_lang_ru', t('val_ru')),
-              en: langText('filter_lang_en', t('val_en')),
-              uk: langText('filter_lang_uk', t('val_uk'))
+              ru: t('val_ru'),
+              en: t('val_en'),
+              uk: t('val_uk')
             },
             default: 'auto'
           },
@@ -831,32 +747,9 @@
         Lampa.SettingsApi.addParam({
           component: SETTINGS_COMPONENT,
           param: {
-            name: CARD_SIZE_KEY,
-            type: 'select',
-            values: {
-              xs: t('val_size_xs'),
-              sm: t('val_size_sm'),
-              md: t('val_size_md'),
-              lg: t('val_size_lg'),
-              xl: t('val_size_xl')
-            },
-            default: 'md'
-          },
-          field: {
-            name: t('set_card_size_name'),
-            description: t('set_card_size_desc')
-          },
-          onChange: function () {
-            syncCardSize();
-          }
-        });
-
-        Lampa.SettingsApi.addParam({
-          component: SETTINGS_COMPONENT,
-          param: {
             name: BACKDROP_KEY,
             type: 'select',
-            values: { on: langText('extensions_enable', t('val_on')), off: langText('extensions_disable', t('val_off')) },
+            values: { on: t('val_on'), off: t('val_off') },
             default: 'on'
           },
           field: {
@@ -875,7 +768,7 @@
           param: {
             name: BADGE_KEY,
             type: 'select',
-            values: { on: langText('extensions_enable', t('val_on')), off: langText('extensions_disable', t('val_off')) },
+            values: { on: t('val_on'), off: t('val_off') },
             default: 'on'
           },
           field: {
@@ -896,11 +789,11 @@
           param: {
             name: RATING_KEY,
             type: 'select',
-            values: { on: langText('extensions_enable', t('val_on')), off: langText('extensions_disable', t('val_off')) },
+            values: { on: t('val_on'), off: t('val_off') },
             default: 'off'
           },
           field: {
-            name: langText('title_rating', t('set_rating_name')),
+            name: t('set_rating_name'),
             description: t('set_rating_desc')
           },
           onChange: function () {
@@ -934,7 +827,7 @@
           param: {
             name: GLARE_KEY,
             type: 'select',
-            values: { on: langText('extensions_enable', t('val_on')), off: langText('extensions_disable', t('val_off')) },
+            values: { on: t('val_on'), off: t('val_off') },
             default: 'on'
           },
           field: {
@@ -951,7 +844,7 @@
           param: {
             name: CLOCK_SECONDS_KEY,
             type: 'select',
-            values: { on: langText('extensions_enable', t('val_on')), off: langText('extensions_disable', t('val_off')) },
+            values: { on: t('val_on'), off: t('val_off') },
             default: 'off'
           },
           field: {
@@ -968,7 +861,7 @@
           param: {
             name: CONTROL_PANEL_KEY,
             type: 'select',
-            values: { on: langText('extensions_enable', t('val_on')), off: langText('extensions_disable', t('val_off')) },
+            values: { on: t('val_on'), off: t('val_off') },
             default: 'off'
           },
           field: {
@@ -1017,7 +910,7 @@
             param: {
               name: 'agnative_topnav_item_' + item.action,
               type: 'select',
-              values: { on: langText('settings_add', t('val_add')), off: t('val_hide') },
+              values: { on: t('val_add'), off: t('val_hide') },
               default: getStoredTopnavActions().indexOf(item.action) > -1 ? 'on' : 'off'
             },
             field: {
@@ -1087,12 +980,6 @@
 
           if (e.name === CLOCK_SECONDS_KEY) {
             restartClock();
-            return;
-          }
-
-          if (e.name === CONTROL_PANEL_KEY) {
-            if (e.value === 'off') closeControlPanel(true);
-            setTimeout(function () { schedulePatch(); }, 80);
             return;
           }
 
@@ -1181,18 +1068,13 @@
     }
 
     function injectStyle() {
-      var host = document.head || document.body;
-      if (!host) return;
+      if (!document.head && !document.body) return;
+      var old = document.getElementById(STYLE_ID);
+      if (old) old.remove();
 
-      var style = document.getElementById(STYLE_ID);
-      if (!style) {
-        style = document.createElement('style');
-        style.id = STYLE_ID;
-        host.appendChild(style);
-      }
-
-      if (!styleCacheText) {
-        styleCacheText = [
+      var style = document.createElement('style');
+      style.id = STYLE_ID;
+      style.textContent = [
         'body.' + BODY_CLASS + ' .head,',
         'body.' + BODY_CLASS + ' .head__body,',
         'body.' + BODY_CLASS + ' .head__wrapper,',
@@ -1550,55 +1432,11 @@
         'body.' + BODY_CLASS + ' .items-line__title { font-size:1em !important; line-height:1.2 !important; font-weight:700 !important; }',
         'body.' + BODY_CLASS + ' .scroll__body.mapping--line { display:flex !important; gap:1.5em !important; }',
         'body.' + BODY_CLASS + ' .scroll__body.mapping--line .full-person { padding: 1em !important; }',
-        'body.' + BODY_CLASS + ' .mapping--grid { display:grid !important; grid-template-columns:repeat(auto-fit, minmax(17.6em, 1fr)) !important; gap: 1em .52em !important; align-items:start !important; }',
-        'body.' + BODY_CLASS + '[' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(13em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(14em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(10.4em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(15.8em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(11.7em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(17.6em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(13em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(19.4em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(14.3em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(21.2em, 1fr)) !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(15.6em, 1fr)) !important; }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + ' .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(15em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(11.1em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(11.9em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(8.8em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(13.4em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(9.9em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(15em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(11.1em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(16.5em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(12.2em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(18em, 1fr)) !important; } }',
-        '@media (max-width: 1279px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(13.3em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + ' .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(15em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(11.1em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(11.9em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(8.8em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(13.4em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(9.9em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(15em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(11.1em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(16.5em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(12.2em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(18em, 1fr)) !important; } }',
-        '@media (max-width: 767px) { body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"][' + BACKDROP_ATTR + '="off"] .mapping--grid { grid-template-columns:repeat(auto-fit, minmax(13.3em, 1fr)) !important; } }',
+        'body.' + BODY_CLASS + ' .mapping--grid { display:grid !important; grid-template-columns:repeat(5, minmax(0, 1fr)) !important; gap:.52em !important; align-items:start !important; }',
+        '@media (max-width: 1279px) { body.' + BODY_CLASS + ' .mapping--grid { grid-template-columns:repeat(4, minmax(0, 1fr)) !important; } }',
+        '@media (max-width: 767px) { body.' + BODY_CLASS + ' .mapping--grid { grid-template-columns:repeat(3, minmax(0, 1fr)) !important; } }',
         'body.' + BODY_CLASS + ' .card { width:auto !important; margin:0 !important; padding-bottom:0 !important; transform-origin:center center !important; overflow:visible !important; }',
         'body.' + BODY_CLASS + ' .items-line .card { width:17.6em !important; flex:0 0 auto !important; }',
-        'body.' + BODY_CLASS + '[' + BACKDROP_ATTR + '="off"] .items-line .card { width:13em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"] .items-line .card { width:14em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:10.4em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"] .items-line .card { width:15.8em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:11.7em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"] .items-line .card { width:17.6em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:13em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"] .items-line .card { width:19.4em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:14.3em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"] .items-line .card { width:21.2em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"][' + BACKDROP_ATTR + '="off"] .items-line .card { width:15.6em !important; }',
         'body.' + BODY_CLASS + ' .card .card-watched { transform: scale(.8) !important; bottom: 0 !important; max-height: 100% !important; overflow: hidden !important; }',
         'body.' + BODY_CLASS + ' .card .card__view { padding-bottom:56.25% !important; margin-bottom:0 !important; border-radius:1.35em !important; overflow:hidden !important; clip-path: inset(0 round 1.35em); -webkit-clip-path: inset(0 round 1.35em); box-shadow: inset 0 1px 0 rgba(255,255,255,.16), inset 0 -1px 0 rgba(255,255,255,.04), 0 8px 18px rgba(0,0,0,.18) !important; transition: transform .28s cubic-bezier(.22,.61,.36,1), box-shadow .28s ease, filter .28s ease, opacity .18s ease !important; }',
         'body.' + BODY_CLASS + ' .card[data-nfx-switched="1"] .card__view { opacity:1 !important; }',
@@ -1608,11 +1446,6 @@
         'body.' + BODY_CLASS + ' .card.hover .card__view { transform: translateY(-.04em) scale(1.03) !important; filter: saturate(1.02) brightness(1.01) !important; box-shadow: inset 0 1px 0 rgba(255,255,255,.18), 0 10px 24px rgba(0,0,0,.16) !important; }',
         'body.' + BODY_CLASS + ' .card.focus::after, body.' + BODY_CLASS + ' .card.hover::after, body.' + BODY_CLASS + ' .card__view::before, body.' + BODY_CLASS + ' .card__view::after { display:none !important; content:none !important; }',
         'body.' + BODY_CLASS + ' .card-episode { width:17.6em !important; flex:0 0 auto !important; margin:0 !important; padding:0 !important; background:transparent !important; border:0 !important; outline:0 !important; box-shadow:none !important; transform:none !important; transform-origin:center center !important; overflow:visible !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xs"] .card-episode { width:14em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="sm"] .card-episode { width:15.8em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="md"] .card-episode { width:17.6em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="lg"] .card-episode { width:19.4em !important; }',
-        'body.' + BODY_CLASS + '[' + CARD_SIZE_ATTR + '="xl"] .card-episode { width:21.2em !important; }',
         'body.' + BODY_CLASS + ' .card-episode.focus, body.' + BODY_CLASS + ' .card-episode.hover, body.' + BODY_CLASS + ' .card-episode.focus .card-episode__body, body.' + BODY_CLASS + ' .card-episode.hover .card-episode__body { border:0 !important; outline:0 !important; box-shadow:none !important; background:transparent !important; }',
         'body.' + BODY_CLASS + ' .card-episode__body { background:transparent !important; border:0 !important; outline:0 !important; box-shadow:none !important; padding:0 !important; margin:0 !important; display:block !important; overflow:visible !important; }',
         'body.' + BODY_CLASS + ' .card-episode .full-episode { position:relative !important; display:block !important; background:transparent !important; border:0 !important; box-shadow:none !important; padding:0 !important; margin:0 !important; overflow:visible !important; transform-origin:center center !important; transition: transform .28s cubic-bezier(.22,.61,.36,1) !important; }',
@@ -1699,12 +1532,9 @@
         '  body.' + BODY_CLASS + ' .agnative-topnav-shell__right { margin-left: 0 !important; padding-left: 0 !important; }',
         '  body.' + BODY_CLASS + ' .agnative-topnav-shell__inner { padding: .18em .22em !important; }',
         '}'
-        ].join('\n');
-      }
-
-      if (style.textContent !== styleCacheText) {
-        style.textContent = styleCacheText;
-      }
+      ].join('\n');
+      if (document.body) document.body.appendChild(style);
+      else document.head.appendChild(style);
     }
 
     function iconSearch() {
@@ -2218,42 +2048,6 @@
       return dock;
     }
 
-    function syncClockActionState(clock, head) {
-      if (!clock) return clock;
-
-      if (controlPanelEnabled()) {
-        clock.classList.add('selector');
-        clock.setAttribute('data-selector', 'true');
-        clock.setAttribute('tabindex', '0');
-        if (clock.getAttribute('data-agnative-bound') !== '1') {
-          bindAction(clock, function () { return triggerClockActions(head); });
-          clock.setAttribute('data-agnative-bound', '1');
-        }
-        return clock;
-      }
-
-      closeControlPanel(false);
-      clock.classList.remove('selector');
-      clock.classList.remove('hover');
-      clock.classList.remove('focus');
-      clock.removeAttribute('data-selector');
-      clock.removeAttribute('tabindex');
-
-      if (clock.getAttribute('data-agnative-bound') === '1') {
-        var detached = clock.cloneNode(true);
-        detached.removeAttribute('data-agnative-bound');
-        detached.classList.remove('selector');
-        detached.classList.remove('hover');
-        detached.classList.remove('focus');
-        detached.removeAttribute('data-selector');
-        detached.removeAttribute('tabindex');
-        if (clock.parentNode) clock.parentNode.replaceChild(detached, clock);
-        clock = detached;
-      }
-
-      return clock;
-    }
-
     function ensureClock(head) {
       if (!head) return null;
       var dock = ensureRightDock(head) || head;
@@ -2261,10 +2055,12 @@
       if (!clock) {
         clock = document.createElement('div');
         clock.id = CLOCK_ID;
-        clock.className = 'agnative-topnav-clock';
+        clock.className = 'agnative-topnav-clock selector';
+        clock.setAttribute('data-selector', 'true');
+        clock.setAttribute('tabindex', '0');
+        bindAction(clock, function () { triggerClockActions(head); });
       }
       if (clock.parentNode !== dock) dock.appendChild(clock);
-      clock = syncClockActionState(clock, head);
       return clock;
     }
 
@@ -2309,49 +2105,6 @@
       startClock();
     }
 
-    function computeTopnavSignature(selectedItems, controlPanelOn) {
-      var itemSig = selectedItems.map(function (item) {
-        return item.action + ':' + item.label;
-      }).join('|');
-      return itemSig + '|panel=' + (controlPanelOn ? 'on' : 'off');
-    }
-
-    function renderTopnavContent(itemsWrap, rightWrap, selectedItems, controlPanelOn) {
-      itemsWrap.innerHTML = '';
-      rightWrap.innerHTML = '';
-
-      selectedItems.forEach(function (def) {
-        var sourceNode = getMenuItem(def.action);
-        var btn = document.createElement('div');
-        btn.className = 'agnative-topnav-shell__item selector';
-        btn.setAttribute('data-action', def.action);
-        btn.setAttribute('data-selector', 'true');
-        btn.setAttribute('tabindex', '0');
-        btn.textContent = def.label;
-        bindMenu(btn, def.action, sourceNode);
-        itemsWrap.appendChild(btn);
-      });
-
-      var iconItems = [
-        { role: 'search', svg: iconSearch(), handler: triggerSearch },
-        { role: 'favorite', svg: iconFavorite(), handler: triggerFavorite }
-      ];
-      if (!controlPanelOn) {
-        iconItems.push({ role: 'settings', svg: iconSettings(), handler: triggerSettings });
-      }
-
-      iconItems.forEach(function (def) {
-        var btn = document.createElement('div');
-        btn.className = 'agnative-topnav-shell__item agnative-topnav-shell__item--icon selector';
-        btn.setAttribute('data-role', def.role);
-        btn.setAttribute('data-selector', 'true');
-        btn.setAttribute('tabindex', '0');
-        btn.innerHTML = def.svg;
-        bindAction(btn, def.handler);
-        rightWrap.appendChild(btn);
-      });
-    }
-
     function patchTopnav() {
       var head = qs('.head__body') || qs('.head');
       if (!head) return false;
@@ -2372,13 +2125,39 @@
       var rightWrap = qs('.agnative-topnav-shell__right', shell);
       if (!itemsWrap || !rightWrap) return false;
 
-      var selectedItems = getSelectedTopnavItems();
-      var controlPanelOn = controlPanelEnabled();
-      var signature = computeTopnavSignature(selectedItems, controlPanelOn);
-      if (signature !== topnavSignature || !itemsWrap.firstChild || !rightWrap.firstChild) {
-        renderTopnavContent(itemsWrap, rightWrap, selectedItems, controlPanelOn);
-        topnavSignature = signature;
+      itemsWrap.innerHTML = '';
+      rightWrap.innerHTML = '';
+
+      getSelectedTopnavItems().forEach(function (def) {
+        var sourceNode = getMenuItem(def.action);
+        var btn = document.createElement('div');
+        btn.className = 'agnative-topnav-shell__item selector';
+        btn.setAttribute('data-action', def.action);
+        btn.setAttribute('data-selector', 'true');
+        btn.setAttribute('tabindex', '0');
+        btn.textContent = def.label;
+        bindMenu(btn, def.action, sourceNode);
+        itemsWrap.appendChild(btn);
+      });
+
+      var iconItems = [
+        { role: 'search', svg: iconSearch(), handler: triggerSearch },
+        { role: 'favorite', svg: iconFavorite(), handler: triggerFavorite }
+      ];
+      if (!controlPanelEnabled()) {
+        iconItems.push({ role: 'settings', svg: iconSettings(), handler: triggerSettings });
       }
+
+      iconItems.forEach(function (def) {
+        var btn = document.createElement('div');
+        btn.className = 'agnative-topnav-shell__item agnative-topnav-shell__item--icon selector';
+        btn.setAttribute('data-role', def.role);
+        btn.setAttribute('data-selector', 'true');
+        btn.setAttribute('tabindex', '0');
+        btn.innerHTML = def.svg;
+        bindAction(btn, def.handler);
+        rightWrap.appendChild(btn);
+      });
 
       registerTopnavController(shell);
 
@@ -2473,12 +2252,11 @@
     }
 
     function switchCardToBackdrop(cardEl) {
-      if (!cardEl || cardEl.getAttribute('data-nfx-switched')) return true;
+      if (cardEl.getAttribute('data-nfx-switched')) return;
+      cardEl.setAttribute('data-nfx-switched', '1');
 
       var data = extractCardData(cardEl);
-      var view = cardEl.querySelector('.card__view');
-      if (!data || !view) return false;
-      cardEl.setAttribute('data-nfx-switched', '1');
+      if (!data) return;
 
       var useBackdrop = backdropEnabled();
 
@@ -2503,7 +2281,8 @@
         }
       }
 
-      if (view.querySelector('.nfx-card-overlay')) return true;
+      var view = cardEl.querySelector('.card__view');
+      if (!view || view.querySelector('.nfx-card-overlay')) return;
 
       var title = data.title || data.name || '';
       if (!title) {
@@ -2572,7 +2351,6 @@
           }
         });
       }
-      return true;
     }
 
     function extractEpisodeShowId(cardEl, data) {
@@ -2594,14 +2372,12 @@
     }
 
     function switchEpisodeCardToBackdrop(cardEl) {
-      if (!cardEl || cardEl.getAttribute('data-nfx-ep-switched')) return true;
-      if (isMobile()) {
-        cardEl.setAttribute('data-nfx-ep-switched', '1');
-        return true;
-      }
+      if (!cardEl || cardEl.getAttribute('data-nfx-ep-switched')) return;
+      cardEl.setAttribute('data-nfx-ep-switched', '1');
+      if (isMobile()) return;
 
       var body = cardEl.querySelector('.full-episode__body');
-      if (!body) return false;
+      if (!body) return;
 
       var fullEp = cardEl.querySelector('.full-episode');
       var numEl = cardEl.querySelector('.full-episode__num');
@@ -2612,10 +2388,7 @@
       var data = extractCardData(cardEl);
       var showInfo = extractEpisodeShowId(cardEl, data);
 
-      if (body.querySelector('.nfx-episode-title') || body.querySelector('.nfx-episode-logo')) {
-        cardEl.setAttribute('data-nfx-ep-switched', '1');
-        return true;
-      }
+      if (body.querySelector('.nfx-episode-title') || body.querySelector('.nfx-episode-logo')) return;
 
       var titleEl = document.createElement('div');
       titleEl.className = 'nfx-episode-title';
@@ -2638,108 +2411,37 @@
           else host.insertBefore(img, host.firstChild);
         });
       }
-      cardEl.setAttribute('data-nfx-ep-switched', '1');
-      return true;
     }
 
     function processCards(container) {
-      if (!container || !container.querySelectorAll) return;
-      enqueueNodeForCards(container);
-      scheduleCardQueueFlush(0);
-    }
-
-    function enqueueCardNode(node) {
-      if (!node || node.nodeType !== 1 || node.getAttribute(cardQueueAttr) === '1') return;
-      node.setAttribute(cardQueueAttr, '1');
-      pendingCardNodes.push(node);
-    }
-
-    function enqueueEpisodeNode(node) {
-      if (!node || node.nodeType !== 1 || node.getAttribute(episodeQueueAttr) === '1') return;
-      node.setAttribute(episodeQueueAttr, '1');
-      pendingEpisodeNodes.push(node);
-    }
-
-    function enqueueNodeForCards(node) {
-      if (!node || (node.nodeType !== 1 && node.nodeType !== 11)) return;
-
-      if (node.nodeType === 1 && node.classList && node.classList.contains('card') && !node.getAttribute('data-nfx-switched')) enqueueCardNode(node);
-      else if (node.querySelectorAll) {
-        var cards = node.querySelectorAll('.card:not([data-nfx-switched]):not([data-nfx-queued])');
-        for (var i = 0; i < cards.length; i++) enqueueCardNode(cards[i]);
-      }
-
-      if (node.nodeType === 1 && node.classList && node.classList.contains('card-episode') && !node.getAttribute('data-nfx-ep-switched')) enqueueEpisodeNode(node);
-      else if (node.querySelectorAll) {
-        var eps = node.querySelectorAll('.card-episode:not([data-nfx-ep-switched]):not([data-nfx-ep-queued])');
-        for (var j = 0; j < eps.length; j++) enqueueEpisodeNode(eps[j]);
-      }
-    }
-
-    function flushNodeQueue(queue, markAttr, doneAttr, retryAttr, processor, budget) {
-      var processed = 0;
-      while (queue.length && processed < budget) {
-        var node = queue.shift();
-        if (!node || node.nodeType !== 1) continue;
-        node.removeAttribute(markAttr);
-        if (!node.isConnected || node.getAttribute(doneAttr) === '1') {
-          processed++;
-          continue;
-        }
-        var applied = processor(node);
-        if (applied === false && node.isConnected) {
-          var retries = parseInt(node.getAttribute(retryAttr) || '0', 10) + 1;
-          if (retries <= 4) {
-            node.setAttribute(retryAttr, String(retries));
-            enqueueNodeForCards(node);
-          } else {
-            node.removeAttribute(retryAttr);
-          }
-        } else {
-          node.removeAttribute(retryAttr);
-        }
-        processed++;
-      }
-      return processed;
-    }
-
-    function flushCardQueue() {
-      cardQueueTimer = null;
-      if (!pluginEnabled()) {
-        clearCardQueue();
-        return;
-      }
-
-      var budget = 24;
-      var done = flushNodeQueue(pendingCardNodes, cardQueueAttr, 'data-nfx-switched', 'data-nfx-retry', switchCardToBackdrop, budget);
-      if (done < budget) {
-        flushNodeQueue(pendingEpisodeNodes, episodeQueueAttr, 'data-nfx-ep-switched', 'data-nfx-ep-retry', switchEpisodeCardToBackdrop, budget - done);
-      }
-
-      if (pendingCardNodes.length || pendingEpisodeNodes.length) {
-        scheduleCardQueueFlush(16);
-      }
-    }
-
-    function scheduleCardQueueFlush(delay) {
-      if (cardQueueTimer) return;
-      cardQueueTimer = setTimeout(flushCardQueue, typeof delay === 'number' ? delay : 16);
+      if (!container) return;
+      var cards = container.querySelectorAll('.card');
+      for (var i = 0; i < cards.length; i++) switchCardToBackdrop(cards[i]);
+      var eps = container.querySelectorAll('.card-episode');
+      for (var j = 0; j < eps.length; j++) switchEpisodeCardToBackdrop(eps[j]);
     }
 
     function observeCards() {
-      if (!window.MutationObserver || !document.body || cardObserver) return;
-      cardObserver = new MutationObserver(function (mutations) {
-        if (!pluginEnabled()) return;
+      if (!window.MutationObserver) return;
+      new MutationObserver(function (mutations) {
         for (var i = 0; i < mutations.length; i++) {
           var added = mutations[i].addedNodes;
           for (var j = 0; j < added.length; j++) {
             var node = added[j];
-            enqueueNodeForCards(node);
+            if (node.nodeType !== 1) continue;
+            if (node.classList && node.classList.contains('card')) {
+              switchCardToBackdrop(node);
+            } else if (node.classList && node.classList.contains('card-episode')) {
+              switchEpisodeCardToBackdrop(node);
+            } else if (node.querySelectorAll) {
+              var cards = node.querySelectorAll('.card');
+              for (var k = 0; k < cards.length; k++) switchCardToBackdrop(cards[k]);
+              var eps = node.querySelectorAll('.card-episode');
+              for (var m = 0; m < eps.length; m++) switchEpisodeCardToBackdrop(eps[m]);
+            }
           }
         }
-        scheduleCardQueueFlush(0);
-      });
-      cardObserver.observe(document.body, { childList: true, subtree: true });
+      }).observe(document.body, { childList: true, subtree: true });
     }
 
     function initGlareRuntime() {
@@ -2825,7 +2527,6 @@
 
     function safePatch() {
       scheduled = false;
-      patchTimer = null;
       if (!pluginEnabled()) {
         removePluginUi();
         return;
@@ -2833,20 +2534,20 @@
       injectStyle();
       if (document.body) document.body.classList.add(BODY_CLASS);
       syncFontSize();
-      syncCardSize();
       syncCardFlags();
 
       var content = qs('.activity--active .scroll__content') || qs('.scroll__content');
       patchTopnav();
       if (!content) return;
       processCards(content);
-      setTimeout(function () { processCards(content); }, 450);
+      setTimeout(function () { processCards(content); }, 400);
+      setTimeout(function () { processCards(content); }, 1200);
     }
 
-    function schedulePatch(delay) {
+    function schedulePatch() {
       if (scheduled) return;
       scheduled = true;
-      patchTimer = setTimeout(safePatch, typeof delay === 'number' ? delay : 120);
+      setTimeout(safePatch, 120);
     }
 
     function startPlugin() {
@@ -2861,20 +2562,23 @@
       if (document.body) document.body.classList.add(BODY_CLASS);
       syncGlareClass();
       syncFontSize();
-      syncCardSize();
       syncCardFlags();
       observeCards();
       initGlareRuntime();
-      if (!pluginRuntimeReady) {
-        processCards(document.body);
-        pluginRuntimeReady = true;
-        setTimeout(function () {
-          var actBody = qs('.activity--active .activity__body') || qs('.activity__body');
-          if (actBody) processCards(actBody);
-        }, 600);
-      }
-      schedulePatch(80);
-      setTimeout(function () { schedulePatch(100); }, 500);
+      processCards(document.body);
+      schedulePatch();
+      setTimeout(function () { injectStyle(); }, 1000);
+      setTimeout(function () { injectStyle(); }, 3000);
+      setTimeout(function () {
+        var actBody = qs('.activity--active .activity__body') || qs('.activity__body');
+        if (actBody) {
+          processCards(actBody);
+        }
+      }, 600);
+
+      schedulePatch();
+      setTimeout(function () { schedulePatch(); }, 400);
+      setTimeout(function () { schedulePatch(); }, 1200);
     }
 
     function bootPlugin() {

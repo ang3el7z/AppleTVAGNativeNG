@@ -17,9 +17,7 @@ if (!/^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(version)) {
 const files = [
   'src/i18n/en.js',
   'src/i18n/ru.js',
-  'src/i18n/uk.js',
-  'appletv_agnative.js',
-  'release/appletv_agnative.js'
+  'src/i18n/uk.js'
 ];
 
 const aboutRegex = /(set_about_desc:\s*'Версия\s+)([^']+?)(\s+Авторы:[^']*')/g;
