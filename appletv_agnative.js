@@ -254,6 +254,7 @@
     } = AGNATIVE_KEYS;
 
     var scheduled = false;
+    var patchTimer = null;
     var clockTimer = null;
     var logoCache = {};
     var logoPending = {};
@@ -268,6 +269,15 @@
     var controlPanelControllerReady = false;
     var controlPanelDocCloseBound = false;
     var swallowClickUntil = 0;
+    var cardObserver = null;
+    var cardQueueTimer = null;
+    var pendingCardNodes = [];
+    var pendingEpisodeNodes = [];
+    var cardQueueAttr = 'data-nfx-queued';
+    var episodeQueueAttr = 'data-nfx-ep-queued';
+    var topnavSignature = '';
+    var styleCacheText = '';
+    var pluginRuntimeReady = false;
 
     function qs(sel, root) {
       return (root || document).querySelector(sel);
@@ -275,6 +285,31 @@
 
     function qsa(sel, root) {
       return Array.prototype.slice.call((root || document).querySelectorAll(sel));
+    }
+
+    function clearCardQueue() {
+      for (var i = 0; i < pendingCardNodes.length; i++) {
+        if (pendingCardNodes[i] && pendingCardNodes[i].removeAttribute) {
+          pendingCardNodes[i].removeAttribute(cardQueueAttr);
+        }
+      }
+      for (var j = 0; j < pendingEpisodeNodes.length; j++) {
+        if (pendingEpisodeNodes[j] && pendingEpisodeNodes[j].removeAttribute) {
+          pendingEpisodeNodes[j].removeAttribute(episodeQueueAttr);
+        }
+      }
+      pendingCardNodes = [];
+      pendingEpisodeNodes = [];
+      if (cardQueueTimer) {
+        clearTimeout(cardQueueTimer);
+        cardQueueTimer = null;
+      }
+    }
+
+    function stopCardObserver() {
+      if (cardObserver && cardObserver.disconnect) cardObserver.disconnect();
+      cardObserver = null;
+      clearCardQueue();
     }
 
     function pluginEnabled() {
@@ -385,6 +420,19 @@
     }
 
     function removePluginUi() {
+      stopCardObserver();
+      topnavSignature = '';
+      pluginRuntimeReady = false;
+      scheduled = false;
+      if (patchTimer) {
+        clearTimeout(patchTimer);
+        patchTimer = null;
+      }
+      if (clockTimer) {
+        clearInterval(clockTimer);
+        clockTimer = null;
+      }
+
       try {
         if (document.body) {
           document.body.classList.remove(BODY_CLASS);
@@ -553,12 +601,19 @@
       qsa('.card[data-nfx-switched]').forEach(function (c) {
         restoreOriginalImg(c);
         c.removeAttribute('data-nfx-switched');
+        c.removeAttribute(cardQueueAttr);
+        c.removeAttribute('data-nfx-retry');
         var overlay = c.querySelector('.nfx-card-overlay');
         if (overlay) overlay.remove();
         var badge = c.querySelector('.nfx-card-logo');
         if (badge) badge.remove();
         var rating = c.querySelector('.nfx-card-rating');
         if (rating) rating.remove();
+      });
+      qsa('.card-episode[data-nfx-ep-switched]').forEach(function (c) {
+        c.removeAttribute('data-nfx-ep-switched');
+        c.removeAttribute(episodeQueueAttr);
+        c.removeAttribute('data-nfx-ep-retry');
       });
     }
 
@@ -1126,13 +1181,18 @@
     }
 
     function injectStyle() {
-      if (!document.head && !document.body) return;
-      var old = document.getElementById(STYLE_ID);
-      if (old) old.remove();
+      var host = document.head || document.body;
+      if (!host) return;
 
-      var style = document.createElement('style');
-      style.id = STYLE_ID;
-      style.textContent = [
+      var style = document.getElementById(STYLE_ID);
+      if (!style) {
+        style = document.createElement('style');
+        style.id = STYLE_ID;
+        host.appendChild(style);
+      }
+
+      if (!styleCacheText) {
+        styleCacheText = [
         'body.' + BODY_CLASS + ' .head,',
         'body.' + BODY_CLASS + ' .head__body,',
         'body.' + BODY_CLASS + ' .head__wrapper,',
@@ -1639,9 +1699,12 @@
         '  body.' + BODY_CLASS + ' .agnative-topnav-shell__right { margin-left: 0 !important; padding-left: 0 !important; }',
         '  body.' + BODY_CLASS + ' .agnative-topnav-shell__inner { padding: .18em .22em !important; }',
         '}'
-      ].join('\n');
-      if (document.body) document.body.appendChild(style);
-      else document.head.appendChild(style);
+        ].join('\n');
+      }
+
+      if (style.textContent !== styleCacheText) {
+        style.textContent = styleCacheText;
+      }
     }
 
     function iconSearch() {
@@ -2246,6 +2309,49 @@
       startClock();
     }
 
+    function computeTopnavSignature(selectedItems, controlPanelOn) {
+      var itemSig = selectedItems.map(function (item) {
+        return item.action + ':' + item.label;
+      }).join('|');
+      return itemSig + '|panel=' + (controlPanelOn ? 'on' : 'off');
+    }
+
+    function renderTopnavContent(itemsWrap, rightWrap, selectedItems, controlPanelOn) {
+      itemsWrap.innerHTML = '';
+      rightWrap.innerHTML = '';
+
+      selectedItems.forEach(function (def) {
+        var sourceNode = getMenuItem(def.action);
+        var btn = document.createElement('div');
+        btn.className = 'agnative-topnav-shell__item selector';
+        btn.setAttribute('data-action', def.action);
+        btn.setAttribute('data-selector', 'true');
+        btn.setAttribute('tabindex', '0');
+        btn.textContent = def.label;
+        bindMenu(btn, def.action, sourceNode);
+        itemsWrap.appendChild(btn);
+      });
+
+      var iconItems = [
+        { role: 'search', svg: iconSearch(), handler: triggerSearch },
+        { role: 'favorite', svg: iconFavorite(), handler: triggerFavorite }
+      ];
+      if (!controlPanelOn) {
+        iconItems.push({ role: 'settings', svg: iconSettings(), handler: triggerSettings });
+      }
+
+      iconItems.forEach(function (def) {
+        var btn = document.createElement('div');
+        btn.className = 'agnative-topnav-shell__item agnative-topnav-shell__item--icon selector';
+        btn.setAttribute('data-role', def.role);
+        btn.setAttribute('data-selector', 'true');
+        btn.setAttribute('tabindex', '0');
+        btn.innerHTML = def.svg;
+        bindAction(btn, def.handler);
+        rightWrap.appendChild(btn);
+      });
+    }
+
     function patchTopnav() {
       var head = qs('.head__body') || qs('.head');
       if (!head) return false;
@@ -2266,39 +2372,13 @@
       var rightWrap = qs('.agnative-topnav-shell__right', shell);
       if (!itemsWrap || !rightWrap) return false;
 
-      itemsWrap.innerHTML = '';
-      rightWrap.innerHTML = '';
-
-      getSelectedTopnavItems().forEach(function (def) {
-        var sourceNode = getMenuItem(def.action);
-        var btn = document.createElement('div');
-        btn.className = 'agnative-topnav-shell__item selector';
-        btn.setAttribute('data-action', def.action);
-        btn.setAttribute('data-selector', 'true');
-        btn.setAttribute('tabindex', '0');
-        btn.textContent = def.label;
-        bindMenu(btn, def.action, sourceNode);
-        itemsWrap.appendChild(btn);
-      });
-
-      var iconItems = [
-        { role: 'search', svg: iconSearch(), handler: triggerSearch },
-        { role: 'favorite', svg: iconFavorite(), handler: triggerFavorite }
-      ];
-      if (!controlPanelEnabled()) {
-        iconItems.push({ role: 'settings', svg: iconSettings(), handler: triggerSettings });
+      var selectedItems = getSelectedTopnavItems();
+      var controlPanelOn = controlPanelEnabled();
+      var signature = computeTopnavSignature(selectedItems, controlPanelOn);
+      if (signature !== topnavSignature || !itemsWrap.firstChild || !rightWrap.firstChild) {
+        renderTopnavContent(itemsWrap, rightWrap, selectedItems, controlPanelOn);
+        topnavSignature = signature;
       }
-
-      iconItems.forEach(function (def) {
-        var btn = document.createElement('div');
-        btn.className = 'agnative-topnav-shell__item agnative-topnav-shell__item--icon selector';
-        btn.setAttribute('data-role', def.role);
-        btn.setAttribute('data-selector', 'true');
-        btn.setAttribute('tabindex', '0');
-        btn.innerHTML = def.svg;
-        bindAction(btn, def.handler);
-        rightWrap.appendChild(btn);
-      });
 
       registerTopnavController(shell);
 
@@ -2393,11 +2473,12 @@
     }
 
     function switchCardToBackdrop(cardEl) {
-      if (cardEl.getAttribute('data-nfx-switched')) return;
-      cardEl.setAttribute('data-nfx-switched', '1');
+      if (!cardEl || cardEl.getAttribute('data-nfx-switched')) return true;
 
       var data = extractCardData(cardEl);
-      if (!data) return;
+      var view = cardEl.querySelector('.card__view');
+      if (!data || !view) return false;
+      cardEl.setAttribute('data-nfx-switched', '1');
 
       var useBackdrop = backdropEnabled();
 
@@ -2422,8 +2503,7 @@
         }
       }
 
-      var view = cardEl.querySelector('.card__view');
-      if (!view || view.querySelector('.nfx-card-overlay')) return;
+      if (view.querySelector('.nfx-card-overlay')) return true;
 
       var title = data.title || data.name || '';
       if (!title) {
@@ -2492,6 +2572,7 @@
           }
         });
       }
+      return true;
     }
 
     function extractEpisodeShowId(cardEl, data) {
@@ -2513,12 +2594,14 @@
     }
 
     function switchEpisodeCardToBackdrop(cardEl) {
-      if (!cardEl || cardEl.getAttribute('data-nfx-ep-switched')) return;
-      cardEl.setAttribute('data-nfx-ep-switched', '1');
-      if (isMobile()) return;
+      if (!cardEl || cardEl.getAttribute('data-nfx-ep-switched')) return true;
+      if (isMobile()) {
+        cardEl.setAttribute('data-nfx-ep-switched', '1');
+        return true;
+      }
 
       var body = cardEl.querySelector('.full-episode__body');
-      if (!body) return;
+      if (!body) return false;
 
       var fullEp = cardEl.querySelector('.full-episode');
       var numEl = cardEl.querySelector('.full-episode__num');
@@ -2529,7 +2612,10 @@
       var data = extractCardData(cardEl);
       var showInfo = extractEpisodeShowId(cardEl, data);
 
-      if (body.querySelector('.nfx-episode-title') || body.querySelector('.nfx-episode-logo')) return;
+      if (body.querySelector('.nfx-episode-title') || body.querySelector('.nfx-episode-logo')) {
+        cardEl.setAttribute('data-nfx-ep-switched', '1');
+        return true;
+      }
 
       var titleEl = document.createElement('div');
       titleEl.className = 'nfx-episode-title';
@@ -2552,37 +2638,108 @@
           else host.insertBefore(img, host.firstChild);
         });
       }
+      cardEl.setAttribute('data-nfx-ep-switched', '1');
+      return true;
     }
 
     function processCards(container) {
-      if (!container) return;
-      var cards = container.querySelectorAll('.card');
-      for (var i = 0; i < cards.length; i++) switchCardToBackdrop(cards[i]);
-      var eps = container.querySelectorAll('.card-episode');
-      for (var j = 0; j < eps.length; j++) switchEpisodeCardToBackdrop(eps[j]);
+      if (!container || !container.querySelectorAll) return;
+      enqueueNodeForCards(container);
+      scheduleCardQueueFlush(0);
+    }
+
+    function enqueueCardNode(node) {
+      if (!node || node.nodeType !== 1 || node.getAttribute(cardQueueAttr) === '1') return;
+      node.setAttribute(cardQueueAttr, '1');
+      pendingCardNodes.push(node);
+    }
+
+    function enqueueEpisodeNode(node) {
+      if (!node || node.nodeType !== 1 || node.getAttribute(episodeQueueAttr) === '1') return;
+      node.setAttribute(episodeQueueAttr, '1');
+      pendingEpisodeNodes.push(node);
+    }
+
+    function enqueueNodeForCards(node) {
+      if (!node || (node.nodeType !== 1 && node.nodeType !== 11)) return;
+
+      if (node.nodeType === 1 && node.classList && node.classList.contains('card') && !node.getAttribute('data-nfx-switched')) enqueueCardNode(node);
+      else if (node.querySelectorAll) {
+        var cards = node.querySelectorAll('.card:not([data-nfx-switched]):not([data-nfx-queued])');
+        for (var i = 0; i < cards.length; i++) enqueueCardNode(cards[i]);
+      }
+
+      if (node.nodeType === 1 && node.classList && node.classList.contains('card-episode') && !node.getAttribute('data-nfx-ep-switched')) enqueueEpisodeNode(node);
+      else if (node.querySelectorAll) {
+        var eps = node.querySelectorAll('.card-episode:not([data-nfx-ep-switched]):not([data-nfx-ep-queued])');
+        for (var j = 0; j < eps.length; j++) enqueueEpisodeNode(eps[j]);
+      }
+    }
+
+    function flushNodeQueue(queue, markAttr, doneAttr, retryAttr, processor, budget) {
+      var processed = 0;
+      while (queue.length && processed < budget) {
+        var node = queue.shift();
+        if (!node || node.nodeType !== 1) continue;
+        node.removeAttribute(markAttr);
+        if (!node.isConnected || node.getAttribute(doneAttr) === '1') {
+          processed++;
+          continue;
+        }
+        var applied = processor(node);
+        if (applied === false && node.isConnected) {
+          var retries = parseInt(node.getAttribute(retryAttr) || '0', 10) + 1;
+          if (retries <= 4) {
+            node.setAttribute(retryAttr, String(retries));
+            enqueueNodeForCards(node);
+          } else {
+            node.removeAttribute(retryAttr);
+          }
+        } else {
+          node.removeAttribute(retryAttr);
+        }
+        processed++;
+      }
+      return processed;
+    }
+
+    function flushCardQueue() {
+      cardQueueTimer = null;
+      if (!pluginEnabled()) {
+        clearCardQueue();
+        return;
+      }
+
+      var budget = 24;
+      var done = flushNodeQueue(pendingCardNodes, cardQueueAttr, 'data-nfx-switched', 'data-nfx-retry', switchCardToBackdrop, budget);
+      if (done < budget) {
+        flushNodeQueue(pendingEpisodeNodes, episodeQueueAttr, 'data-nfx-ep-switched', 'data-nfx-ep-retry', switchEpisodeCardToBackdrop, budget - done);
+      }
+
+      if (pendingCardNodes.length || pendingEpisodeNodes.length) {
+        scheduleCardQueueFlush(16);
+      }
+    }
+
+    function scheduleCardQueueFlush(delay) {
+      if (cardQueueTimer) return;
+      cardQueueTimer = setTimeout(flushCardQueue, typeof delay === 'number' ? delay : 16);
     }
 
     function observeCards() {
-      if (!window.MutationObserver) return;
-      new MutationObserver(function (mutations) {
+      if (!window.MutationObserver || !document.body || cardObserver) return;
+      cardObserver = new MutationObserver(function (mutations) {
+        if (!pluginEnabled()) return;
         for (var i = 0; i < mutations.length; i++) {
           var added = mutations[i].addedNodes;
           for (var j = 0; j < added.length; j++) {
             var node = added[j];
-            if (node.nodeType !== 1) continue;
-            if (node.classList && node.classList.contains('card')) {
-              switchCardToBackdrop(node);
-            } else if (node.classList && node.classList.contains('card-episode')) {
-              switchEpisodeCardToBackdrop(node);
-            } else if (node.querySelectorAll) {
-              var cards = node.querySelectorAll('.card');
-              for (var k = 0; k < cards.length; k++) switchCardToBackdrop(cards[k]);
-              var eps = node.querySelectorAll('.card-episode');
-              for (var m = 0; m < eps.length; m++) switchEpisodeCardToBackdrop(eps[m]);
-            }
+            enqueueNodeForCards(node);
           }
         }
-      }).observe(document.body, { childList: true, subtree: true });
+        scheduleCardQueueFlush(0);
+      });
+      cardObserver.observe(document.body, { childList: true, subtree: true });
     }
 
     function initGlareRuntime() {
@@ -2668,6 +2825,7 @@
 
     function safePatch() {
       scheduled = false;
+      patchTimer = null;
       if (!pluginEnabled()) {
         removePluginUi();
         return;
@@ -2675,20 +2833,20 @@
       injectStyle();
       if (document.body) document.body.classList.add(BODY_CLASS);
       syncFontSize();
+      syncCardSize();
       syncCardFlags();
 
       var content = qs('.activity--active .scroll__content') || qs('.scroll__content');
       patchTopnav();
       if (!content) return;
       processCards(content);
-      setTimeout(function () { processCards(content); }, 400);
-      setTimeout(function () { processCards(content); }, 1200);
+      setTimeout(function () { processCards(content); }, 450);
     }
 
-    function schedulePatch() {
+    function schedulePatch(delay) {
       if (scheduled) return;
       scheduled = true;
-      setTimeout(safePatch, 120);
+      patchTimer = setTimeout(safePatch, typeof delay === 'number' ? delay : 120);
     }
 
     function startPlugin() {
@@ -2707,20 +2865,16 @@
       syncCardFlags();
       observeCards();
       initGlareRuntime();
-      processCards(document.body);
-      schedulePatch();
-      setTimeout(function () { injectStyle(); }, 1000);
-      setTimeout(function () { injectStyle(); }, 3000);
-      setTimeout(function () {
-        var actBody = qs('.activity--active .activity__body') || qs('.activity__body');
-        if (actBody) {
-          processCards(actBody);
-        }
-      }, 600);
-
-      schedulePatch();
-      setTimeout(function () { schedulePatch(); }, 400);
-      setTimeout(function () { schedulePatch(); }, 1200);
+      if (!pluginRuntimeReady) {
+        processCards(document.body);
+        pluginRuntimeReady = true;
+        setTimeout(function () {
+          var actBody = qs('.activity--active .activity__body') || qs('.activity__body');
+          if (actBody) processCards(actBody);
+        }, 600);
+      }
+      schedulePatch(80);
+      setTimeout(function () { schedulePatch(100); }, 500);
     }
 
     function bootPlugin() {
